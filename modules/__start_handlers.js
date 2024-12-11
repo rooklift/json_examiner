@@ -1,6 +1,7 @@
 "use strict";
 
-const {ipcRenderer} = require("electron");
+const {ipcRenderer, webUtils} = require("electron");		// webUtils might not actually exist, depending on version. Don't use it directly.
+const get_path_for_file = (webUtils && webUtils.getPathForFile) ? webUtils.getPathForFile : file => file.path;
 
 // Uncaught exceptions should trigger an alert (once only)...
 
@@ -48,8 +49,8 @@ window.addEventListener("drop", (event) => {
 	let files = [];
 	if (event.dataTransfer && event.dataTransfer.files) {
 		for (let file of event.dataTransfer.files) {
-			if (file.path) {
-				files.push(file.path);
+			if (get_path_for_file(file)) {
+				files.push(get_path_for_file(file));
 			}
 		}
 	}
